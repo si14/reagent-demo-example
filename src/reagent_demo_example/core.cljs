@@ -37,17 +37,35 @@
 
 (defonce experiments (r/atom (sorted-map)))
 
-(def columns ["Name" "Organism" "Platform" "Method"])
+(def columns ["Name" "Organism" "Method" "Platform"])
 
 (def test-data [
-                ["experiment1" "homo sapiens" "ilumina 666" "microarray"]
-                ["experiment2" "mus musculus" "ilumina 667" "microarray"]])
+                ["The Path to Triacylglyceride Obesity in the sta6 Strain of Chlamydomonas reinhardtii" "Chlamydomonas reinhardtii" "" "Illumina HiSeq 2000"]
+                ["Modelling and rescuing neurodevelopmental defect of Down syndrome using induced pluripotent stem cells from monozygotic twins discordant for trisomy 21 [GEO: GSE52249]" "Homo sapiens" "RNA-Seq" "Illumina HiSeq 2000"]
+                ["Let-7 represses Nr6a1 and a mid-gestation developmental program in adult fibroblasts [mRNA-seq_Flag-HA-NR6A1_overexpr]" "Mus musculus" "" "Illumina HiSeq 2000"]
+                ["RNA-seq from paired human CRC/control mucosa samples" "Homo sapiens" "llumina HiSeq 2000" ""]
+                ["Control of Pro-Inflammatory Gene Programs by Regulated Trimethylation and Demethylation of Histone H4K20" "Mus musculus" "" "Illumina Genome Analyzer II"]
+                ["Four distinct types of dehydration stress memory genes in Arabidopsis thaliana" "Arabidopsis thaliana" "" "Illumina Genome Analyzer II"]
+                ["Global analysis of p53-regulated transcription reveals its direct targets and unexpected regulatory mechanisms (GRO-Seq)" "Homo sapiens" "" "Illumina HiSeq 2000"]
+                ["tRNAs marked with CCACCA are targeted for degradatio" "Glycine max" "" "Illumina HiSeq 2000"]
+                ["Characterization of the single-cell transcriptional landscape by highly multiplex RNA-Seq" "Mus musculus" "RNA-Seq" ""]
+                ["Transcription factors OVOL1 and OVOL2 induce the mesenchymal to epithelial transition in human cancer" "Homo sapiens" "" "Illumina HiSeq 2000"]
+                ["Global small RNA analysis in fast-growing Arabidposis thaliana with elevated level of ATP and sugars" "Arabidopsis thaliana" "" "Illumina HiSeq 2000"]
+                ["Functional non-canonical microRNAs in the mammalian hippocampus and cortex" "Mus musculus" "" "Illumina Genome Analyzer II"]
+                ["Impact of library preparation on downstream analysis and interpretation of RNA-seq data: comparison between Illumina PolyA and NuGEN Ovation protocol" "Homo sapiens" "" "Illumina Genome Analyzer IIx, Illumina HiSeq 2000"]
+                ["In vivo and transcriptome-wide identification of RNA-binding protein target sites [RNA-Seq]" "Caenorhabditis elegans" "" "Illumina HiSeq 2000"]
+                ["Gene expression analysis of murine SAMHD1 deficient peritoneal macrophages (S1056 to S1075" "Mus musculus" "" "Illumina HiSeq 2000"]
+                ["Let-7 represses Nr6a1 and a mid-gestation developmental program in adult fibroblasts [RNA-seq_siRNA_transfection]" "Mus musculus" "" "Illumina HiSeq 2000"]
+                ["Function, targets and evolution of Caenorhabditis elegans piRNAs (small RNA-Seq)" "Caenorhabditis elegans" "" "Illumina Genome Analyzer II"]
+                ["Small RNA expression in swi6 mutants or dcr1 delta fission yeast Schizosaccharomyces pombe" "Schizosaccharomyces pombe" "" "Illumina HiSeq 2000"]
+                ["UBL5 is essential for pre-mRNA splicing and sister chromatid cohesion in human cells" "Homo sapiens" "" "Illumina HiSeq 2000"]
+                ["Identification of soybean seed developmental stage specific and tissue specific miRNA targets by degradome sequencing" "Glycine max" "" "Illumina HiSeq 2000"]])
 
 (defn add-experiment [experiment-data]
-  (let [[name organism platform method] experiment-data]
+  (let [[name organism method platform] experiment-data]
     (let [id (swap! counter inc)]
       (.log js/console id)
-      (swap! experiments assoc id {:id id :name name :organism organism :platform platform :method method}))))
+      (swap! experiments assoc id {:id id :name name :organism organism :method method :platform platform}))))
 
 (defonce init (do
                 (doseq [experiment test-data] (add-experiment experiment))))
