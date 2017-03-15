@@ -78,7 +78,7 @@
                            ])]])
 
 (defn experiment-row [experiment]
-  [:tr
+  [:tr {:on-click #(js/alert experiment)}
    (for [column columns] [:td (get experiment (keyword (str/lower-case column)))])])
 
 (defn table-body []
