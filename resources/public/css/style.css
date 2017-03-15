@@ -1,2 +1,5 @@
-/* some style */
-
+.experiment-table {
+    width: auto;
+    margin-left: 50px;
+    margin-top: 30px;
+}

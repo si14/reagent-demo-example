@@ -1,5 +1,5 @@
 (ns reagent-demo-example.core
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r] [clojure.string :as str]))
 
 ;(defonce timer (r/atom (js/Date.)))
 ;
@@ -37,7 +37,7 @@
 
 (defonce experiments (r/atom (sorted-map)))
 
-(def columns ["name" "organism" "platform" "method"])
+(def columns ["Name" "Organism" "Platform" "Method"])
 
 (def test-data [
                 ["experiment1" "homo sapiens" "ilumina 666" "microarray"]
@@ -52,16 +52,16 @@
 (defonce init (do
                 (doseq [experiment test-data] (add-experiment experiment))))
 
-;((.log js/console (vals @experiments)))
-
 (defn experiment-table-head []
   [:thead
    [:tr
-    (for [column columns] [:td column])]])
+    (for [column columns] [:td
+                           [:b column]
+                           ])]])
 
 (defn experiment-row [experiment]
   [:tr
-   (for [column columns] [:td (get experiment (keyword column))])])
+   (for [column columns] [:td (get experiment (keyword (str/lower-case column)))])])
 
 (defn table-body []
   (let [experiments (vals @experiments)]
@@ -69,15 +69,9 @@
      (for [experiment experiments] [experiment-row experiment])]))
 
 (defn experiment-table []
-  [:table {:class "experiment-table"}
+  [:table {:class "table table-hover experiment-table"}
    [experiment-table-head]
    [table-body]])
 
 (r/render-component [experiment-table]
                     (. js/document (getElementById "app")))
-
-;(defn on-js-reload []
-;  ;; optionally touch your app-state to force rerendering depending on
-;  ;; your application
-;  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-;)
