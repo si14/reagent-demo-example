@@ -1,5 +1,8 @@
 (ns reagent-demo-example.core
-  (:require [reagent.core :as r] [clojure.string :as str]))
+  (:require
+   [reagent.core :as r]
+   [clojure.string :as str]
+   [cljs.spec :as s]))
 
 ;(defonce timer (r/atom (js/Date.)))
 ;
@@ -33,9 +36,23 @@
 ;(r/render-component [simple-example]
 ;                          (. js/document (getElementById "app")))
 
+
+(s/def ::id integer?)
+(s/def ::name string?)
+(s/def ::organism string?)
+(s/def ::method string?)
+(s/def ::platform string?)
+(s/def ::experiment (s/keys :req-un [::id ::name ::organism ::method ::platform]))
+(s/def ::experiments (s/map-of integer? ::experiment))
+
 (defonce counter (r/atom 0))
 
 (defonce experiments (r/atom (sorted-map)))
+
+(add-watch experiments ::demo-watch
+           (fn [_ _ _ new]
+             (when-not (s/valid? ::experiments new)
+               (.log js/console "YOLO" (s/explain-str ::experiments new)))))
 
 (def columns ["Name" "Organism" "Method" "Platform"])
 
@@ -59,7 +76,7 @@
                 ["Function, targets and evolution of Caenorhabditis elegans piRNAs (small RNA-Seq)" "Caenorhabditis elegans" "" "Illumina Genome Analyzer II"]
                 ["Small RNA expression in swi6 mutants or dcr1 delta fission yeast Schizosaccharomyces pombe" "Schizosaccharomyces pombe" "" "Illumina HiSeq 2000"]
                 ["UBL5 is essential for pre-mRNA splicing and sister chromatid cohesion in human cells" "Homo sapiens" "" "Illumina HiSeq 2000"]
-                ["Identification of soybean seed developmental stage specific and tissue specific miRNA targets by degradome sequencing" "Glycine max" "" "Illumina HiSeq 2000"]])
+                ["Identification of soybean seed developmental stage specific and tissue specific miRNA targets by degradome sequencing" "Glycine max" "" 2.3]])
 
 (defn add-experiment [experiment-data]
   (let [[name organism method platform] experiment-data]
