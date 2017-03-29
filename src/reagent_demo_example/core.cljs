@@ -73,18 +73,23 @@
 (defn experiment-table-head []
   [:thead
    [:tr
-    (for [column columns] [:td
-                           [:b column]
-                           ])]])
+    (for [[idx column] (map-indexed vector columns)]
+      ^{:key idx}
+      [:td
+       [:b column]])]])
 
 (defn experiment-row [experiment]
   [:tr {:on-click #(js/alert experiment)}
-   (for [column columns] [:td (get experiment (keyword (str/lower-case column)))])])
+   (for [[idx column] (map-indexed vector columns)]
+     ^{:key idx}
+     [:td (get experiment (keyword (str/lower-case column)))])])
 
 (defn table-body []
   (let [experiments (vals @experiments)]
     [:tbody
-     (for [experiment experiments] [experiment-row experiment])]))
+     (for [[idx experiment] (map-indexed vector experiments)]
+       ^{:key idx}
+       [experiment-row experiment])]))
 
 (defn experiment-table []
   [:table {:class "table table-hover experiment-table"}
